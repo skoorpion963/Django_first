@@ -115,6 +115,7 @@ def tableV1_update():
         table.save()
     except TableView.DoesNotExist:
         TableView.objects.create(name='tableV1', table=list_values)
+        print('досадная ошибка V1')
     print('tablev1 done')
 
 
