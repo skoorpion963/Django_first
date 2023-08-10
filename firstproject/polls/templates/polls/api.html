@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+<div class="container bg-info">
+    <div class="mb-3"></div>
+    <div class="row">
+        
+        <div class="col-md-12">
+           Здесь вы можете воспользоваться API
+        </div>
+        
+    </div>
+</div>
+<div class="container bg-dark text-white">
+    <div class="mb-5"></div>
+    <div class="row">
+        
+        <div class="col-md-12">
+            <strong></strong><b>API</b></strong>
+        </div>
+        
+    </div>
+</div>
+<div class="container bg-dark text-white">
+    <div class="mb-3"></div>
+    <div class="row">
+        
+        <div class="col-md-12">
+            <strong></strong><b>/api/v1/simbollist/</b></strong> - получение списка всех монет 
+        </div>
+        
+    </div>
+</div>
+
+<div class="container bg-dark text-white">
+    <div class="mb-3"></div>
+    <div class="row">
+        <div class="col-md-12">
+            <strong></strong><b>/api/v1/"simbol"/"interval"/</b></strong> - получение объема монеты за выбранный интервал , обновление объемов монеты происходит в 02 секунду каждой минуты. 
+        </div> 
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            Типы параметра interval - "1_min", "5_min", "10_min", "30_min", "1_h", "3_h", "5_h"
+        </div> 
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            Все возможные параметры simbol можно получить <strong></strong><b>/api/v1/simbollist/</b></strong>
+        </div> 
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            Пример рабочей ссылки - <strong></strong><b>/api/v1/ethusdt/10_min/</b></strong>
+        </div> 
+    </div>
+
+</div>
+
+<div class="container bg-dark text-white">
+    <div class="mb-3"></div>
+    <div class="row">
+        <div class="col-md-12">
+            <strong></strong><b>/api/v1/"table"/</b></strong> - Получение таблиц JSON 
+        </div> 
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+           <strong></strong><b> Типы параметра table :</b></strong> 
+        </div> 
+    </div>
+    <div class="row">
+        <div class="col-md-12"> 
+            <strong></strong><b>table</b></strong> - данные для "обычной" таблицы 
+        </div> 
+    </div>
+    <div class="row">
+        <div class="col-md-12"> 
+            <strong></strong><b>tableV2</b></strong> - данные для "улучшенной" таблицы 
+        </div> 
+    </div>
+    <div class="row">
+        <div class="col-md-12"> 
+           Пример рабочей ссылки  -  <strong></strong><b>/api/v1/table/</b></strong>
+        </div> 
+    </div>
+    <div class="row">
+        <div class="col-md-12"> 
+           <strong></strong><b>Параметры таблицы : </b></strong>
+        </div> 
+    </div>
+    <div class="row">
+        <div class="col-md-12"> 
+           <strong></strong><b>"asks"</b></strong> - Крупная лимитная заявка на покупку 
+        </div> 
+    </div>
+    <div class="row">
+        <div class="col-md-12"> 
+           <strong></strong><b>"bids"</b></strong> - Крупная лимитная заявка на продажу
+        </div> 
+    </div>
+    <div class="row">
+        <div class="col-md-12"> 
+           <strong></strong><b>"name"</b></strong> - Название монеты  
+        </div> 
+    </div>
+    <div class="row">
+        <div class="col-md-12"> 
+           <strong></strong><b>"timea"</b></strong> - Скорость в минутах за которую может быть разъедена заявка на покупку
+        </div> 
+    </div>
+    <div class="row">
+        <div class="col-md-12"> 
+           <strong></strong><b>"timea"</b></strong> - Скорость в минутах за которую может быть разъедена заявка на продажу
+        </div> 
+    </div>
+    <div class="row">
+        <div class="col-md-12"> 
+           <strong></strong><b>"rengea"</b></strong> - Расстояние до лимитной заявки в процентах на покупку 
+        </div> 
+    </div>
+    <div class="row">
+        <div class="col-md-12"> 
+           <strong></strong><b>"rengeb"</b></strong> - Расстояние до лимитной заявки в процентах на продажу 
+        </div> 
+    </div>
+    <div class="row">
+        <div class="col-md-12"> 
+           <strong></strong><b>"values"</b></strong> - Объем монеты за прошедшую минуту (в монетах)
+        </div> 
+    </div>
+    <div class="row">
+        <div class="col-md-12"> 
+           <strong></strong><b>"count_trades"</b></strong> - Колличество сделок по монете за минуту 
+        </div> 
+    </div>
+
+</div>
+
+
+
+{% endblock %}

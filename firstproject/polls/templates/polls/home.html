@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% load static %}
+<style>
+    .resized-image {
+      max-width: 400px; /* Максимальная ширина изображения */
+      max-height: 400px; /* Максимальная высота изображения */
+      width: auto;
+      height: auto;
+    }
+</style>
+
+    <div class="container">
+        <div class="mb-5"></div>
+        <div class="mb-5"></div>
+        <div class="mb-5"></div>
+
+        <h1>Добро пожаловать на криптовалютный скринер </h1>
+        
+    </div>
+    
+
+    <div class="container">
+        <div class="mb-5"></div>
+        <div class="mb-5"></div>
+        <div class="mb-5"></div>
+        <div class="row">
+            
+            <div class="col-md-7">
+                Данный скринер собирает инфорамцию о сделках, лимитных завках  и объемах торгов по фьючерсам .
+                На основе этих данных создается две таблицы , первая хранит в себе самые крупные заявки , вторая ищет 
+                заявки ,от которых , как я пологаю можно торговать отскок или пробитие. Ниже вы можете видеть примеры заявок 
+                из этих 2 таблиц.
+            </div>
+            
+        </div>
+    </div>
+
+    
+    <div class="container">
+        <div class="mb-3"></div>
+        <div class="mb-3"></div>
+        <div class="mb-3"></div>
+        <div class="row">
+            
+            <div class="col-md-4">
+                    
+                <img src="/media/images/bad_primer.png" alt="Image" class="resized-image">
+                Скринер 
+            </div>
+            <div class="col-md-4">
+                    
+                <img src="/media/images/tableV1.png" alt="Image" class="resized-image">
+                СкринерV2
+            </div>
+
+            
+            
+        </div>
+        <div class="mb-3"></div>
+        <div class="row">
+            <div class="col-md-7">
+                *Красным цветом указанны заявки которые будут показаны в таблицах 
+            </div>
+            
+        </div>
+    </div>
+    
+
+    <div class="container">
+        <div class="mb-5"></div>
+        <div class="mb-5"></div>
+        <div class="mb-5"></div>
+        <div class="row">
+            
+            <div class="col-md-7">
+               Если вы находите проект интерессным и хотите внедрения таких функий как : 
+               обновление информации в реальном времени , оповещение о появлении заявок в телеграмме.
+               Ваша финансовая поддержка проекта может ускорить появление этих или других полезных функций и изменений. 
+
+            </div>
+            
+        </div>
+        <div class="mb-2"></div>
+        <div class="row">
+            
+            <div class="col-md-7">
+              Binance ID : 355482457 / Nickname : Shellnameilya
+            </div>
+            
+        </div>
+        
+    </div>
+
+
+
+
+    
+
+
+  
+{% endblock %}

@@ -1,0 +1,160 @@
+
+
+    
+    
+{% extends "base.html" %}
+<!-- {% load static %} -->
+
+{% block content %}
+    <!-- <link rel="stylesheet" href="{% static 'polls/css/table.css' %}">
+    
+
+    <div class="table-container">
+        <table class="GeneratedTable">
+            <thead>
+                <tr>
+                {% for header in headers %}
+                    <th>{{ header }}</th>
+                {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in list1 %}
+                <tr>                    
+                    <td> {{row.name}} </td>
+                    <td> {{row.values}} </td>
+                    <td> {{row.bids}} </td>
+                    <td> {{row.asks}} </td>
+                    <td> {{row.count_trades}} </td>
+                </tr>
+                {% endfor %}
+                
+            </tbody>
+        </table>
+    </div>
+    <div class="table-container" >
+        <table class="GeneratedTable">
+            <thead>
+                <tr>
+                {% for header in headers %}
+                    <th>{{ header }}</th>
+                {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in list2 %}
+                <tr>                    
+                    <td> {{row.name}} </td>
+                    <td> {{row.values}} </td>
+                    <td> {{row.bids}} </td>
+                    <td> {{row.asks}} </td>
+                    <td> {{row.count_trades}} </td>
+                </tr>
+                {% endfor %}                
+            </tbody>
+        </table>
+    </div>
+    <div class="table-container" >
+        <table class="GeneratedTable">
+            <thead>
+                <tr>
+                {% for header in headers %}
+                    <th>{{ header }}</th>
+                {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in list3 %}
+                <tr>                    
+                    <td> {{row.name}} </td>
+                    <td> {{row.values}} </td>
+                    <td> {{row.bids}} </td>
+                    <td> {{row.asks}} </td>
+                    <td> {{row.count_trades}} </td>
+                </tr>
+                {% endfor %}                
+            </tbody>
+        </table>
+    </div> -->
+
+    <div class="container">
+        <div class="mb-2"></div>
+        <div class="mb-2"></div>
+        <div class="mb-2"></div>
+        <div class="row">     
+            <div class="col-12 col-md-4">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                        {% for header in headers %}
+                            <th class="col">{{ header }}</th>
+                        {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in list1 %}
+                        <tr>                    
+                            <td class="col"> {{row.name}} </td>
+                            <td class="col"> {{row.values}} </td>
+                            <td class="col"> {{row.bids}} </td>
+                            <td class="col"> {{row.asks}} </td>
+                            
+                        </tr>
+                        {% endfor %} 
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-12 col-md-4">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                        {% for header in headers %}
+                            <th class="col">{{ header }}</th>
+                        {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in list2 %}
+                        <tr>                    
+                            <td class="col"> {{row.name}} </td>
+                            <td class="col"> {{row.values}} </td>
+                            <td class="col"> {{row.bids}} </td>
+                            <td class="col"> {{row.asks}} </td>
+                            
+                        </tr>
+                        {% endfor %} 
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-12 col-md-4">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                        {% for header in headers %}
+                            <th class="col">{{ header }}</th>
+                        {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in list3 %}
+                        <tr>                    
+                            <td class="col"> {{row.name}} </td>
+                            <td class="col"> {{row.values}} </td>
+                            <td class="col"> {{row.bids}} </td>
+                            <td class="col"> {{row.asks}} </td>
+                            
+                        </tr>
+                        {% endfor %} 
+                    </tbody>
+                </table>
+                
+            </div>
+        </div>
+    </div>
+    
+
+
+
+{% endblock %}
+
+

@@ -1,0 +1,160 @@
+{% extends "base.html" %}
+
+{% block content %}
+    
+
+    <div class="container">
+        <div class="mb-5"></div>
+        <div class="mb-5"></div>
+        <div class="mb-5"></div>
+
+        <h1>Добро пожаловать на криптовалютный скринер </h1>
+
+        
+        
+        
+        
+    </div>
+    <div class="container">
+        <div class="mb-5"></div>
+        <div class="mb-5"></div>
+        <div class="mb-5"></div>
+        <div class="row">
+            
+            <div class="col-md-7">
+                Данный скринер был вдохновлен сайтом <a class="link" href="https://winscreener.live/">https://winscreener.live/</a> в котором в реальном времени обновляется информация о больших лимитных заявках в стакане. С той лиш разницей , что в оригинальном
+                сайте нужно собственноручно выставлять объем заявки считающейся большой. К тому же , отсутствовала возможность 
+                осуществлять поиск заявок объем которых был меньше 100.000$. Я решил исправит в своей работе , а так же , 
+                добавить эксперементальную функцию по поиску крупных заявок объем которых превышает объем в стакане перед ними.
+                
+            </div>
+            
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="mb-3"></div>
+        <div class="row">
+            
+            <div class="col-md-7">
+               В этом проекте я релизовал некоторые технологии , которые , как я надеюсь, позволят мне получить стажировку 
+            </div>
+            
+        </div>
+    </div>
+    <div class="container">
+        <div class="mb-2"></div>
+        <div class="row"> 
+            <div class="col-md-7">
+                <strong></strong><b>websocket</b></strong> -  получение информации о сделках по монетам binance , для подсчета объемов
+            </div>
+        </div>
+    </div>    
+    <div class="container">
+        <div class="mb-2"></div>
+        <div class="row"> 
+            <div class="col-md-7">
+                <strong></strong><b>asyncio</b></strong> - обратобки ответов websocket 
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="mb-2"></div>
+        <div class="row">      
+            <div class="col-md-7">
+                <strong></strong><b>Django Rest Api </b></strong> - создание возможности пользователями использовать акутальную информацию об объемах монет (бинанс начинает отправлять не коректную информацию спустя 5 минут прослушки их API)
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="mb-2"></div>
+        <div class="row"> 
+            <div class="col-md-7">
+                <strong></strong><b>PostgreSQL</b></strong> - хранения информации об объемах и крупных лимитных заявках , 150 записей добавляется каждую минуту , это 216000 в день, поля типа ArrayField и JSONFiel позволяют не использовать дополнительную не реалиционную базу данных.
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="mb-2"></div>
+        <div class="row">     
+            <div class="col-md-7">
+                <strong></strong><b>Django</b></strong> - удобный конструктор ,с кучей функций и огромным потенциалом 
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="mb-2"></div>
+        <div class="row">     
+            <div class="col-md-7">
+                <strong></strong><b>Redis</b></strong> - использую в качестве брокера сообщений для <strong></strong><b> Selery</b></strong> 
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="mb-2"></div>
+        <div class="row">     
+            <div class="col-md-7">
+                <strong></strong><b>Selery</b></strong> - отправка оповещаний пользователям в телеграмм , так же считаю важной технологией для меня ,как backend разработчика
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="mb-2"></div>
+        <div class="row">     
+            <div class="col-md-7">
+                <strong></strong><b>Selery Beat</b></strong> - раз в две секунды обновляю данные в таблицах и записываю их в модели с полями JSONFiel, таким образом пользователь сразу получает информацию о текущих объемах уже хранящююся в базе данных , а не ожидает пока будет выполнен код по сбору данных , так же как я надеюсь что  это должно оптимизировать работу моего сайта.
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="mb-2"></div>
+        <div class="row">     
+            <div class="col-md-7">
+                <strong></strong><b>bootstrap4</b></strong> - Оформление и дизайн  
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="mb-5"></div>
+        <div class="row">     
+            <div class="col-md-7">
+                <strong></strong><b>Ожидают изучения: </b></strong> 
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="mb-2"></div>
+        <div class="row">     
+            <div class="col-md-7">
+                <strong></strong><b>Django Channels</b></strong> - websocket Django без костылей 
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="mb-2"></div>
+        <div class="row">     
+            <div class="col-md-7">
+                <strong></strong><b>Daphne</b></strong> - асинхронный сервер для работы <strong></strong><b>Django Channels</b></strong>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="mb-2"></div>
+        <div class="row">     
+            <div class="col-md-7">
+                <strong></strong><b>JavaScript</b></strong> - для работы всей этой красоты 
+            </div>
+        </div>
+    </div>
+    
+    
+
+
+
+    
+
+
+           
+        </div>
+    </div>
+{% endblock %}

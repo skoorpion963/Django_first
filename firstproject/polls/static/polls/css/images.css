@@ -1,0 +1,24 @@
+
+.resized-image {
+max-width: 400px; /* Максимальная ширина изображения */
+max-height: 300px; /* Максимальная высота изображения */
+width: auto;
+height: auto;
+}
+
+.resized-image {
+    max-width: 400px; /* Максимальная ширина изображения */
+    max-height: 400px; /* Максимальная высота изображения */
+    width: auto;
+    height: auto;
+}
+
+/* <style>
+                    .resized-image {
+                      max-width: 400px; 
+                      max-height: 400px; 
+                      width: auto;
+                      height: auto;
+                    }
+</style> */
+                 
