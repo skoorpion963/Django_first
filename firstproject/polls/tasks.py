@@ -61,14 +61,8 @@ def tableV1_update():
     row = {'name': '', 'values':'','bids':' - ','timeb':' - ', 'rangeb': ' - ',
         'asks':' - ','timea':' - ','rangea': ' - ','count_trades':''}
 
-    # тупая логика , переделать 
-    if current_time.second < 3:
-        current_time = current_time - timedelta(minutes=1,
-                                                 seconds=current_time.second)
-        past_minute = current_time + timedelta(seconds=30)
-    else:
-        past_minute = current_time - timedelta(seconds=current_time.second+1)
 
+    past_minute = current_time - timedelta(minutes=60)
     
     symbols = Simbol.objects.prefetch_related(
         Prefetch('cryptotransaction_set',
@@ -82,6 +76,12 @@ def tableV1_update():
         latest_crypto_transaction = None
         latest_crypto_transactions = symbol.cryptotransaction_set.all()
         if latest_crypto_transactions:
+            # получаю средний объем за 60 мин
+            total_volume = sum(
+                transaction.volume for transaction in latest_crypto_transactions
+            )+1
+            average_volume = total_volume / len(latest_crypto_transactions)
+
             latest_crypto_transaction = latest_crypto_transactions[0]
        
         biglimits = symbol.biglimits_set.all()
@@ -99,16 +99,18 @@ def tableV1_update():
             row['count_trades']=latest_crypto_transaction.count_trades
             if bids:
                 row['bids'] =  bids.volume[-1]
-                row["timeb"] = round((row["bids"]+1)/(row['values']+1),1)
-                row['rangeb'] = str(bids.price).rstrip('0')
+                row["timeb"] = round((row["bids"]+1)/(average_volume+1),1)
+                row['rangeb'] = bids.price
             if asks:
                 row['asks'] = asks.volume[-1]
-                row["timea"] = round((row["asks"]+1)/(row['values']+1),1)
-                row['rangea'] = str(asks.price).rstrip('0')
+                row["timea"] = round((row["asks"]+1)/(average_volume+1),1)
+                row['rangea'] = asks.price
         list_values.append(row)
         row = {'name': '', 'values':'','bids':' - ','timeb':' - ', 'rangeb': ' - ',
-        'asks':' - ','timea':' - ','rangea': ' - ','count_trades':''}       
+        'asks':' - ','timea':' - ','rangea': ' - ','count_trades':''}
     # обновляю информацию в базе данных
+    
+
     try:
         table = TableView.objects.get(name='tableV1')
         table.table = list_values
@@ -116,12 +118,20 @@ def tableV1_update():
     except TableView.DoesNotExist:
         TableView.objects.create(name='tableV1', table=list_values)
         print('досадная ошибка V1')
-    print('tablev1 done')
+    # print('tablev1 done')
 
 
 # создаю слепок таблицы и сохраняю его для удобства пользователей 
 @shared_task
 def table_update():
+    
+    # поиск ошибок
+    def write_list_to_file(filename, data_list):
+        current_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        formatted_list = [f'[{current_time}] {item}' for item in data_list]
+        with open(filename, 'a') as file:
+            for formatted_item in formatted_list:
+                file.write(f'{formatted_item}\n')
 
     current_time = datetime.now()
     timezone = pytz.timezone('Europe/Moscow') 
@@ -131,15 +141,7 @@ def table_update():
     row = {'name': '', 'values':'','bids':' - ','timeb':' - ', 'rangeb': ' - ',
         'asks':' - ','timea':' - ','rangea': ' - ','count_trades':''}
 
-    # тупая логика , переделать 
-    if current_time.second < 3:
-        current_time = current_time - timedelta(minutes=1,
-            seconds=current_time.second)
-        past_minute = current_time + timedelta(seconds=30)
-    else:
-        past_minute = current_time - timedelta(
-            seconds=current_time.second+1)
-
+    past_minute = current_time - timedelta(minutes=60)
     
     symbols = Simbol.objects.prefetch_related(
         Prefetch('cryptotransaction_set', 
@@ -154,8 +156,14 @@ def table_update():
         latest_crypto_transaction = None
         latest_crypto_transactions = symbol.cryptotransaction_set.all()
         if latest_crypto_transactions:
+            # получаю средний объем за 60 мин
+            total_volume = sum(
+                transaction.volume for transaction in latest_crypto_transactions
+            )+1
+            average_volume = total_volume / len(latest_crypto_transactions)
+
             latest_crypto_transaction = latest_crypto_transactions[0]
-        # Ваш код обработки
+        
         biglimits = symbol.biglimits_set.all()
         asks = False
         bids = False
@@ -171,13 +179,13 @@ def table_update():
             row['count_trades']=latest_crypto_transaction.count_trades
             if bids:
                 row['bids'] =  bids.volume
-                row["timeb"] = round((row["bids"]+1)/(row['values']+1),1)
+                row["timeb"] = round((row["bids"]+1)/(average_volume+1),1)
                 row['rangeb'] = bids.price
             if asks:
                 row['asks'] = asks.volume
-                row["timea"] = round((row["asks"]+1)/(row['values']+1),1)
+                row["timea"] = round((row["asks"]+1)/(average_volume+1),1)
                 row['rangea'] = asks.price
-            list_values.append(row)
+        list_values.append(row)
         row = {'name': '', 'values':'','bids':' - ','timeb':' - ', 'rangeb': ' - ',
         'asks':' - ','timea':' - ','rangea': ' - ','count_trades':''}
 
@@ -188,7 +196,8 @@ def table_update():
         table.save()
     except TableView.DoesNotExist:
         TableView.objects.create(name='table', table=list_values)
-    print('table done')
+        
+    # print('table done')
    
 
 # загрузка минутных объемов 
@@ -201,20 +210,54 @@ def upload_volume():
     import websockets
 
 
-    connection_true = True
+    # connection_true = True
+
+    # проверка подключения 
+    class connection_check:
+
+        def __init__(self) -> None:
+            
+            self.list_volumes_received = []
+            self.connection_state = True 
+
+
+        # проверка подключения 
+        async def __connection_check__(self,volume):
+            if len(self.list_volumes_received) < 154:
+                self.list_volumes_received.append(volume)
+            else:
+                if sum(self.list_volumes_received) == 0:
+                    self.connection_state = False
+                else:
+                    self.list_volumes_received = []
+
+
+        # возвращает состояние соединения 
+        def __is_connection__(self):
+            return self.connection_state
+        
+
+        # обнуляю при перезагрузке 
+        def __reload_connection__(self):
+            self.connection_state = True
+            self.list_volumes_received = []
+
+        
+
     # сделки по монете 
     class simbol_volue:
         
         # инициализация объекта класса 
-        def __init__(self, name,value=None,time = None,
-            start = None,count_trades = None):
+        def __init__(self, name, connection , value=None,time = None,
+            start = None,count_trades = None, ):
 
             self.name = name
             self.value = 0
             self.time = 0
             self.start = True
-            self.count_trades = 0
-
+            self.count_trades = 0 
+            self.connection = connection
+ 
         # пололнение объема
         async def __value_append__(self,value,time):
             if self.start:
@@ -222,7 +265,6 @@ def upload_volume():
                 self.value = value
                 self.start = False
                 self.count_trades += 1
-                self.list_volumes_received = []
             else :
                 if self.time[4] == time[4]:
                     self.value += value
@@ -242,37 +284,24 @@ def upload_volume():
                                     volume = self.value,
                                     count_trades = self.count_trades)
             if self.value == 0:
-                await self.__connection_check__(0)
+                await self.connection.__connection_check__(0)
             else :
-                await self.__connection_check__(1)
+                await self.connection.__connection_check__(1)
         
-        # проверка подсчета объемов 
-        async def __connection_check__(self,volume):
-            if len(self.list_volumes_received) < 154:
-                self.list_volumes_received.append(volume)
-            else:
-                if sum(self.list_volumes_received) == 0:
-                    global connection_true 
-                    connection_true = False
-                    print("переданы пустые объемы , перезапускаю подключение ")
-                    send_info("переданы пустые объемы , перезапускаю подключение ")
-                    
-                else:
-                    self.list_volumes_received = []
+        # # проверка подсчета объемов 
+        # async def __connection_check__(self,volume):
+        #     if len(self.list_volumes_received) < 154:
+        #         self.list_volumes_received.append(volume)
+        #     else:
+        #         if sum(self.list_volumes_received) == 0:
+        #             global connection_true 
+        #             connection_true = False
+        #         else:
+        #             self.list_volumes_received = []
 
-            
-    # создаю словарь символов и строку для вебсокета 
-    simbols = []
-    simbol = {}
-    url = ''
-    count = 0
-    for i in simbols_list:
-        if 'busd' not in i :
-            simbol[i] = simbol_volue(i)
-            simbols.append(i)
-            url = url + i+'@aggTrade/'
-            count += 1
-    url =url[:-1]
+        
+
+
 
 
     # синхронная функция вставки в таблицу
@@ -283,7 +312,7 @@ def upload_volume():
 
 
     # принудительный подсчет объемов за минуту в 1-ую секунду минуты 
-    async def time_control():
+    async def time_control(simbol):
         while True:
             if time.localtime()[5] == 1:
                 for i in simbol:
@@ -292,17 +321,17 @@ def upload_volume():
 
 
     # подключаюсь к вебсокету и получаю все сделки по запрашиваемым торговы символам 
-    async def get_trades():
+    async def get_trades(connection , url , simbol):
 
         while True:
-            global connection_true
-            connection_true = True
+            if connection.__is_connection__():
+                connection.__reload_connection__()
             try:
                 async with websockets.connect("wss://fstream.binance.com/stream?streams="\
                     +url) as websocket:
                     
                     # если объемы не равны 0 , то соединение работает 
-                    while connection_true:
+                    while connection.__is_connection__():
                         response = await websocket.recv()             
                         # достаю информацию о времени и объеме сделки , заполняю словарь 
                         data = json.loads(response)
@@ -310,18 +339,28 @@ def upload_volume():
                         trans_value = float(data['data']['q'])
                         name = data['data']['s'].lower()
                         await simbol[name].__value_append__(trans_value,trans_time)
+                    # если объемы за минуту по всем символам равны 0 , перезапускаю эту шляпу
+                    if connection.__is_connection__() == False :
+                        print("переданы пустые объемы , перезапускаю подключение ")
+                        send_info("переданы пустые объемы , перезапускаю подключение ")
+                        websocket.close()
 
+                
             except websockets.exceptions.ConnectionClosedError:
-                            # Обработка разрыва соединения
+                # Обработка разрыва соединения
+                websocket.close()
                 send_info("Соединение закрыто. Повторная попытка подключения через некоторое время...")
                 print("Соединение закрыто. Повторная попытка подключения через некоторое время...")
                 await asyncio.sleep(5) 
 
+
             except Exception as e:
+                websocket.close()
                 # Обработка других исключений
                 send_info("Произошла ошибка:", e)
 
 
+    # супер элегантный способ закрыть таску с бесконечным циклом 
     def handle_interrupt(signum, frame):
         print("Received SIGINT (Ctrl+C)")
         # Здесь вы можете выполнить необходимые действия перед завершением
@@ -331,11 +370,27 @@ def upload_volume():
     
 
     async def main():
+
+
+        # создаю словарь символов и строку для вебсокета 
+        connection =  connection_check()
+        simbols = []
+        simbol = {}
+        url = ''
+        count = 0
+        for i in simbols_list:
+            if 'busd' not in i :
+                simbol[i] = simbol_volue(i, connection)
+                simbols.append(i)
+                url = url + i+'@aggTrade/'
+                count += 1
+        url =url[:-1]
+
         # по идее должно выкидывать из бесконечного цикла 
         signal.signal(signal.SIGINT, handle_interrupt)        
 
-        task1 = asyncio.create_task(time_control())
-        task2 = asyncio.create_task(get_trades())
+        task1 = asyncio.create_task(time_control(simbol))
+        task2 = asyncio.create_task(get_trades(connection, url, simbol))
         print('upload_volume starting .. ')
         await asyncio.gather(task1, task2)
         print('процесс завершен')
